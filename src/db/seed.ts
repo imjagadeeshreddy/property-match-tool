@@ -4,10 +4,12 @@
  */
 import { config } from 'dotenv';
 
+// Must run before ./index is evaluated, or the client falls back to the
+// local file. Static imports are hoisted, so ./index is imported lazily
+// inside seed() below - do not turn that back into a top-level import.
 config({ path: '.env.local' });
 
-import { db } from './index';
-import { buyers, plots, type NewBuyer, type NewPlot } from './schema';
+import type { NewBuyer, NewPlot } from './schema';
 
 const LAKH = 100_000;
 const CRORE = 10_000_000;
@@ -165,6 +167,12 @@ const SAMPLE_BUYERS: NewBuyer[] = [
 ];
 
 async function seed() {
+  const { db } = await import('./index');
+  const { buyers, plots } = await import('./schema');
+
+  const target = process.env.DATABASE_URL ?? 'file:./data/plot-match.db';
+  console.log(`Seeding ${target.split('//')[1] ?? target}`);
+
   await db.delete(plots);
   await db.delete(buyers);
 
