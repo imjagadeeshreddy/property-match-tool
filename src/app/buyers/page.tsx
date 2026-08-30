@@ -21,7 +21,7 @@ export default async function BuyersPage({
     searchParams.status ?? '',
   )
     ? (searchParams.status as BuyerStatus)
-    : 'new';
+    : 'active';
 
   const [allBuyers, allPlots] = await Promise.all([
     db.select().from(buyers).orderBy(desc(buyers.updatedAt)),
@@ -56,9 +56,9 @@ export default async function BuyersPage({
         {visible.length === 0 ? (
           <EmptyState
             title={`No ${BUYER_STATUS_LABEL[active].toLowerCase()} buyers`}
-            hint={active === 'new' ? 'Add a buyer when someone enquires.' : undefined}
-            actionLabel={active === 'new' ? 'Add a buyer' : undefined}
-            actionHref={active === 'new' ? '/buyers/new' : undefined}
+            hint={active === 'active' ? 'Add a buyer when someone enquires.' : undefined}
+            actionLabel={active === 'active' ? 'Add a buyer' : undefined}
+            actionHref={active === 'active' ? '/buyers/new' : undefined}
           />
         ) : (
           <div className="space-y-3">

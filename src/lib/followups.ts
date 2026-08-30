@@ -5,7 +5,7 @@ import { daysSince } from './format';
 export const FOLLOW_UP_AFTER_DAYS = 5;
 
 export function isDueForFollowUp(buyer: Buyer): boolean {
-  if (buyer.status !== 'new' && buyer.status !== 'active') return false;
+  if (buyer.status !== 'active') return false;
   const days = daysSince(buyer.lastContactedAt);
   return days === null || days > FOLLOW_UP_AFTER_DAYS;
 }

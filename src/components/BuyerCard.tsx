@@ -8,7 +8,7 @@ import { BuyerStatusPill } from './StatusPill';
 
 export function BuyerCard({ buyer, matchCount }: { buyer: Buyer; matchCount: number }) {
   const due = isDueForFollowUp(buyer);
-  const canMatch = buyer.status === 'new' || buyer.status === 'active';
+  const canMatch = buyer.status === 'active';
 
   return (
     <Link href={`/buyers/${buyer.id}`} className="card active:bg-slate-50">

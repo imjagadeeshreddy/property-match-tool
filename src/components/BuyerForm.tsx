@@ -84,7 +84,7 @@ export function BuyerForm({
       <ChoiceGroup
         name="status"
         label="Status"
-        defaultValue={buyer?.status ?? 'new'}
+        defaultValue={buyer?.status ?? 'active'}
         options={BUYER_STATUSES.map((status) => ({
           value: status,
           label: BUYER_STATUS_LABEL[status],

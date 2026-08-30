@@ -27,6 +27,9 @@ export function PlotCard({ plot, matchCount }: { plot: Plot; matchCount: number 
             {matchCount === 1 ? '1 matching buyer' : `${matchCount} matching buyers`}
           </span>
         )}
+        {plot.status === 'under_negotiation' && (
+          <span className="text-base font-semibold text-amber-700">Not being offered</span>
+        )}
       </div>
 
       <p className="mt-2 truncate text-slate-500">

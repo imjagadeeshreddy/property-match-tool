@@ -24,7 +24,7 @@ function readBuyerForm(data: FormData) {
   const statusRaw = optionalText(data, 'status');
   const status = (BUYER_STATUSES as readonly string[]).includes(statusRaw ?? '')
     ? (statusRaw as BuyerStatus)
-    : 'new';
+    : 'active';
 
   if (!name) return { error: "Please enter the buyer's name." } as const;
   if (!phone) return { error: 'Please enter a phone number.' } as const;
@@ -93,21 +93,11 @@ export async function setBuyerStatus(id: number, status: BuyerStatus): Promise<v
   revalidatePath('/');
 }
 
-/**
- * "Called today" — the single most-used action on the dashboard. Also nudges
- * a brand-new buyer into "active", since a call means work has started.
- */
+/** "Called today" — the single most-used action on the Today screen. */
 export async function markContactedToday(id: number): Promise<void> {
-  const [buyer] = await db.select().from(buyers).where(eq(buyers.id, id));
-  if (!buyer) return;
-
   await db
     .update(buyers)
-    .set({
-      lastContactedAt: new Date(),
-      status: buyer.status === 'new' ? 'active' : buyer.status,
-      updatedAt: new Date(),
-    })
+    .set({ lastContactedAt: new Date(), updatedAt: new Date() })
     .where(eq(buyers.id, id));
 
   revalidatePath('/buyers');

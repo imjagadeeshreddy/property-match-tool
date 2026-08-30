@@ -4,7 +4,7 @@ import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 export const PLOT_STATUSES = ['available', 'under_negotiation', 'sold'] as const;
 export type PlotStatus = (typeof PLOT_STATUSES)[number];
 
-export const BUYER_STATUSES = ['new', 'active', 'closed', 'lost'] as const;
+export const BUYER_STATUSES = ['active', 'closed', 'lost'] as const;
 export type BuyerStatus = (typeof BUYER_STATUSES)[number];
 
 export const SIZE_UNITS = ['acres', 'cents', 'guntas', 'sq ft', 'sq yards'] as const;
@@ -38,7 +38,7 @@ export const buyers = sqliteTable('buyers', {
   budgetMax: real('budget_max').notNull(),
   areaPreference: text('area_preference').notNull(),
   sizePreference: text('size_preference'),
-  status: text('status', { enum: BUYER_STATUSES }).notNull().default('new'),
+  status: text('status', { enum: BUYER_STATUSES }).notNull().default('active'),
   lastContactedAt: integer('last_contacted_at', { mode: 'timestamp' }),
   notes: text('notes'),
   createdAt: integer('created_at', { mode: 'timestamp' })

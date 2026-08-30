@@ -16,10 +16,9 @@ export default async function DashboardPage() {
     db.select().from(buyers),
   ]);
 
-  const availableCount = allPlots.filter((plot) => plot.status === 'available').length;
-  const activeBuyerCount = allBuyers.filter(
-    (buyer) => buyer.status === 'new' || buyer.status === 'active',
-  ).length;
+  // Counts the same set the Plots "Available" tab shows: everything not sold.
+  const availableCount = allPlots.filter((plot) => plot.status !== 'sold').length;
+  const activeBuyerCount = allBuyers.filter((buyer) => buyer.status === 'active').length;
   const soldThisMonth = allPlots.filter(
     (plot) => plot.status === 'sold' && isThisMonth(plot.soldAt),
   ).length;

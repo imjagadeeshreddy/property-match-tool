@@ -6,27 +6,33 @@ import { FilterTabs } from '@/components/FilterTabs';
 import { PageHeader } from '@/components/PageHeader';
 import { PlotCard } from '@/components/PlotCard';
 import { db } from '@/db';
-import { PLOT_STATUSES, buyers, plots, type PlotStatus } from '@/db/schema';
+import { buyers, plots, type Plot } from '@/db/schema';
 import { countMatchesPerPlot } from '@/lib/matching';
 
 export const dynamic = 'force-dynamic';
 
-const TAB_LABEL: Record<PlotStatus, string> = {
-  available: 'Available',
-  under_negotiation: 'Talking',
-  sold: 'Sold',
-};
+/**
+ * Two tabs, three statuses. A plot being negotiated is still on the market,
+ * so it lives under "Available" with a "Talking" badge - it just stops being
+ * offered to other buyers. Keeps the screen simple without losing the state.
+ */
+const TABS = [
+  { value: 'available', label: 'Available' },
+  { value: 'sold', label: 'Sold' },
+] as const;
+
+type TabValue = (typeof TABS)[number]['value'];
+
+function inTab(plot: Plot, tab: TabValue): boolean {
+  return tab === 'sold' ? plot.status === 'sold' : plot.status !== 'sold';
+}
 
 export default async function PlotsPage({
   searchParams,
 }: {
   searchParams: { status?: string };
 }) {
-  const active: PlotStatus = (PLOT_STATUSES as readonly string[]).includes(
-    searchParams.status ?? '',
-  )
-    ? (searchParams.status as PlotStatus)
-    : 'available';
+  const active: TabValue = searchParams.status === 'sold' ? 'sold' : 'available';
 
   const [allPlots, allBuyers] = await Promise.all([
     db.select().from(plots).orderBy(desc(plots.updatedAt)),
@@ -34,7 +40,7 @@ export default async function PlotsPage({
   ]);
 
   const matchCounts = countMatchesPerPlot(allPlots, allBuyers);
-  const visible = allPlots.filter((plot) => plot.status === active);
+  const visible = allPlots.filter((plot) => inTab(plot, active));
 
   return (
     <>
@@ -51,16 +57,16 @@ export default async function PlotsPage({
         <FilterTabs
           basePath="/plots"
           active={active}
-          tabs={PLOT_STATUSES.map((status) => ({
-            value: status,
-            label: TAB_LABEL[status],
-            count: allPlots.filter((plot) => plot.status === status).length,
+          tabs={TABS.map((tab) => ({
+            value: tab.value,
+            label: tab.label,
+            count: allPlots.filter((plot) => inTab(plot, tab.value)).length,
           }))}
         />
 
         {visible.length === 0 ? (
           <EmptyState
-            title={`No ${TAB_LABEL[active].toLowerCase()} plots yet`}
+            title={active === 'sold' ? 'No plots sold yet' : 'No plots yet'}
             hint={active === 'available' ? 'Add a plot to start matching buyers.' : undefined}
             actionLabel={active === 'available' ? 'Add a plot' : undefined}
             actionHref={active === 'available' ? '/plots/new' : undefined}

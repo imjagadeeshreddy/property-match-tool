@@ -121,7 +121,7 @@ const SAMPLE_BUYERS: NewBuyer[] = [
     budgetMax: 35 * LAKH,
     areaPreference: 'Moinabad',
     sizePreference: '200–300 sq yards',
-    status: 'new',
+    status: 'active',
     lastContactedAt: null,
     notes: 'Came through Rafi bhai. Wants an approved layout only.',
   },
@@ -141,7 +141,7 @@ const SAMPLE_BUYERS: NewBuyer[] = [
     budgetMin: 30 * LAKH,
     budgetMax: 50 * LAKH,
     areaPreference: 'Kollur',
-    status: 'new',
+    status: 'active',
     lastContactedAt: daysAgo(20),
   },
   {

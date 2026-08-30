@@ -8,7 +8,8 @@ import type { Buyer, Plot } from '@/db/schema';
  *   1. plot.askingPrice is inside [buyer.budgetMin, buyer.budgetMax]
  *   2. plot.location loosely matches buyer.areaPreference
  *
- * Only "available" plots are matched, and only against "new"/"active" buyers.
+ * Only "available" plots are matched - a plot under negotiation is deliberately
+ * held back, so he is never sent to offer land that is already half sold.
  */
 
 export function isMatchablePlot(plot: Pick<Plot, 'status'>): boolean {
@@ -16,7 +17,7 @@ export function isMatchablePlot(plot: Pick<Plot, 'status'>): boolean {
 }
 
 export function isMatchableBuyer(buyer: Pick<Buyer, 'status'>): boolean {
-  return buyer.status === 'new' || buyer.status === 'active';
+  return buyer.status === 'active';
 }
 
 export function priceMatches(

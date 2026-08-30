@@ -17,10 +17,6 @@ export const dynamic = 'force-dynamic';
 
 /** Which one-tap moves make sense from where the buyer is right now. */
 const NEXT_STEPS: Record<BuyerStatus, { status: BuyerStatus; label: string; style: string }[]> = {
-  new: [
-    { status: 'active', label: 'Mark as active', style: 'btn-secondary w-full' },
-    { status: 'lost', label: 'Not interested any more', style: 'btn-secondary w-full' },
-  ],
   active: [
     { status: 'closed', label: 'Deal done', style: 'btn-success w-full' },
     { status: 'lost', label: 'Not interested any more', style: 'btn-secondary w-full' },
@@ -43,7 +39,7 @@ export default async function BuyerDetailPage({ params }: { params: { id: string
 
   const matches = findMatchingPlots(buyer, allPlots);
   const plotMatchCounts = countMatchesPerPlot(matches, allBuyers);
-  const isOpen = buyer.status === 'new' || buyer.status === 'active';
+  const isOpen = buyer.status === 'active';
 
   return (
     <>
@@ -120,7 +116,7 @@ export default async function BuyerDetailPage({ params }: { params: { id: string
 
           {!isOpen ? (
             <p className="rounded-2xl border border-dashed border-slate-300 bg-white px-5 py-6 text-center text-slate-500">
-              Matching is only shown for new and active buyers.
+              Matching is only shown for active buyers.
             </p>
           ) : matches.length === 0 ? (
             <p className="rounded-2xl border border-dashed border-slate-300 bg-white px-5 py-6 text-center text-slate-500">

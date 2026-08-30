@@ -7,7 +7,6 @@ export const PLOT_STATUS_LABEL: Record<PlotStatus, string> = {
 };
 
 export const BUYER_STATUS_LABEL: Record<BuyerStatus, string> = {
-  new: 'New',
   active: 'Active',
   closed: 'Closed',
   lost: 'Lost',
@@ -21,7 +20,6 @@ export const PLOT_STATUS_STYLE: Record<PlotStatus, string> = {
 };
 
 export const BUYER_STATUS_STYLE: Record<BuyerStatus, string> = {
-  new: 'bg-blue-100 text-blue-800',
   active: 'bg-emerald-100 text-emerald-800',
   closed: 'bg-slate-200 text-slate-600',
   lost: 'bg-rose-100 text-rose-700',
