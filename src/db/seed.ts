@@ -2,7 +2,9 @@
  * Realistic sample data so the app can be tried out before real plots exist.
  * Run with `npm run db:seed`. Wipes both tables first.
  */
-import 'dotenv/config';
+import { config } from 'dotenv';
+
+config({ path: '.env.local' });
 
 import { db } from './index';
 import { buyers, plots, type NewBuyer, type NewPlot } from './schema';
